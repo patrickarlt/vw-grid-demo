@@ -1,5 +1,5 @@
 var timer = require("grunt-timer");
-
+var remFallback = require("rework-rem-fallback");
 module.exports = function(grunt) {
   timer.init(grunt, {friendlyTime: true});
 
@@ -26,15 +26,12 @@ module.exports = function(grunt) {
         dest: 'dist/main.css'
       },
     },
-    px_to_rem: {
-      dist: {
-        options: {
-          base: 16,
-          fallback: true
-        },
-        files: {
-          'dist/main.css': ['dist/main.css'],
-        }
+    rework: {
+      'dist/main.css': 'dist/main.css',
+      options: {
+        use: [
+          [remFallback],
+        ]
       }
     }
   });
@@ -42,8 +39,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-autoprefixer');
-  grunt.loadNpmTasks('grunt-px-to-rem');
+  grunt.loadNpmTasks('grunt-rework');
 
-  grunt.registerTask('build', ['sass', 'autoprefixer', 'px_to_rem']);
+  grunt.registerTask('build', ['sass', 'autoprefixer', 'rework']);
   grunt.registerTask('default', ['watch']);
 };

@@ -14,6 +14,7 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-autoprefixer": "~0.7.3",
     "grunt-timer": "~0.5.1",
-    "grunt-px-to-rem": "~0.2.2"
+    "grunt-rework": "0.0.6",
+    "rework-rem-fallback": "~1.0.0"
   }
 }

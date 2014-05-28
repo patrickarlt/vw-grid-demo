@@ -1,12 +1,13 @@
 // Config
 $total-columns:     24 !default;
 $container-width:   90vw !default;
-$container-max:     1280pxi !default;
+$container-max:     1280px !default;
 $column-gutter:     1.5vw !default;
+$debug:             true;
 
 // Fallback Config
-$column-gutter-fallback: 20pxi !default;
-$container-width-fallback: 960pxi !default;
+$column-gutter-fallback: 20px !default;
+$container-width-fallback: 960px !default;
 
 // Colors
 $lightest-gray:     #EDEDED !default;
@@ -73,33 +74,32 @@ html, body {
     }
 
     // DEBUG
-    &:before {
-      content: "#{$i}";
+    @if $debug {
+      &:before {
+        content: "#{$i}";
+      }
     }
   }
 }
 
 // Debug
-[class^="column-"]:before {
-  box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.10);
-  border: 1px dashed rgba(0, 0, 0, 0.25);
-  display: inline-block;
-  width: 100%;
-  margin-top: baseline(1);
-  color: rgba(0,0,0,0.25);
-  text-align: center;
-  line-height: baseline(3);
-  height: baseline(3);
-  font-family: monospace;
-  font-weight: 700;
-  font-size: 1em;
-}
-
-// Last column in container should be clearfixed,
-// this removes A LOT of selectors
-[class^="column-"]:last-child {
-  @extend %clearfix;
+@if $debug {
+  [class^="column-"]:before {
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.10);
+    border: 1px dashed rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    width: 100%;
+    margin-top: baseline(.5);
+    margin-bottom: baseline(.5);
+    color: rgba(0,0,0,0.25);
+    text-align: center;
+    line-height: baseline(3);
+    height: baseline(3);
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 1em;
+  }
 }
 
 // Columns inside columns should offset the parent columns padding
