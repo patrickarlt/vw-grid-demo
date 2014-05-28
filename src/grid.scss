@@ -1,0 +1,108 @@
+// Config
+$total-columns:     24 !default;
+$container-width:   90vw !default;
+$container-max:     1280px !default;
+$container-min:     0 !default;
+$column-gutter:     1.5vw !default;
+
+// Colors
+$lightest-gray:     #EDEDED !default;
+$lighter-gray:      #CCCCCC !default;
+
+// Classes
+%clearfix {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// simplified respond to mixin that works with libsass the tailcoat one doesn't work
+@mixin respond-to($type, $m: max-width) {
+  @media screen and ($m: $type) {
+    @content;
+  }
+}
+
+// Clearfix Mixin
+@mixin clearfix() {
+  @extend %clearfix;
+}
+
+html, body {
+  margin: 0;
+}
+
+// Container (Saw they used a 0 padded container, which I like)
+.container {
+  @extend %clearfix;
+  width: $container-width;
+  max-width: $container-max;
+  min-width: $container-min;
+  padding: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+// Floated left, no margin, etc
+%column-base {
+  box-sizing: border-box;
+  float: left;
+  margin: 0;
+  padding: 0 $column-gutter / 2;
+}
+
+// Generate all column classes
+@for $i from 1 through $total-columns {
+  .column-#{$i} {
+    @extend %column-base;
+    width: ($i / $total-columns) * 90vw - .01vw;
+    max-width: ($i / $total-columns) * $container-max;
+
+    > .column-#{$i} {
+      margin-left: -($column-gutter/2); // align gutters properly when you have an scenario when you want to go back up a size in grids like 3 rows of 6 / 4-2 / 6 columns
+    }
+
+    // DEBUG
+    &:before {
+      content: "#{$i}";
+    }
+  }
+}
+
+// Debug
+[class^="column-"]:before {
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.10);
+  border: 1px dashed rgba(0, 0, 0, 0.25);
+  display: inline-block;
+  width: 100%;
+  margin-top: baseline(1);
+  color: rgba(0,0,0,0.25);
+  text-align: center;
+  line-height: baseline(3);
+  height: baseline(3);
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1em;
+}
+
+// Last column in container should be clearfixed,
+// this removes A LOT of selectors
+[class^="column-"]:last-child {
+  @extend %clearfix;
+}
+
+// Columns inside columns should offset the parent columns padding
+[class^="column-"] {
+  [class^="column-"]:first-child {
+    margin-left: -$column-gutter / 2;
+  }
+  [class^="column-"]:last-child {
+    margin-right: -$column-gutter / 2;
+  }
+}
