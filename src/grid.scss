@@ -1,9 +1,12 @@
 // Config
 $total-columns:     24 !default;
 $container-width:   90vw !default;
-$container-max:     1280px !default;
-$container-min:     0 !default;
+$container-max:     1280pxi !default;
 $column-gutter:     1.5vw !default;
+
+// Fallback Config
+$column-gutter-fallback: 20pxi !default;
+$container-width-fallback: 960pxi !default;
 
 // Colors
 $lightest-gray:     #EDEDED !default;
@@ -40,31 +43,33 @@ html, body {
 // Container (Saw they used a 0 padded container, which I like)
 .container {
   @extend %clearfix;
+  width: $container-width-fallback;
   width: $container-width;
   max-width: $container-max;
-  min-width: $container-min;
   padding: 0;
   margin-right: auto;
   margin-left: auto;
 }
 
 // Floated left, no margin, etc
-%column-base {
+[class^="column-"] {
   box-sizing: border-box;
   float: left;
   margin: 0;
+  padding: 0 $column-gutter-fallback / 2;
   padding: 0 $column-gutter / 2;
 }
 
 // Generate all column classes
 @for $i from 1 through $total-columns {
   .column-#{$i} {
-    @extend %column-base;
+    width: ($i / $total-columns) * $container-width-fallback;
     width: ($i / $total-columns) * 90vw - .01vw;
     max-width: ($i / $total-columns) * $container-max;
 
     > .column-#{$i} {
-      margin-left: -($column-gutter/2); // align gutters properly when you have an scenario when you want to go back up a size in grids like 3 rows of 6 / 4-2 / 6 columns
+      margin-left: -($column-gutter-fallback / 2);
+      margin-left: -($column-gutter / 2); // align gutters properly when you have an scenario when you want to go back up a size in grids like 3 rows of 6 / 4-2 / 6 columns
     }
 
     // DEBUG
@@ -100,9 +105,11 @@ html, body {
 // Columns inside columns should offset the parent columns padding
 [class^="column-"] {
   [class^="column-"]:first-child {
-    margin-left: -$column-gutter / 2;
+    margin-left: -($column-gutter-fallback / 2);
+    margin-left: -($column-gutter / 2);
   }
   [class^="column-"]:last-child {
-    margin-right: -$column-gutter / 2;
+    margin-right: -($column-gutter-fallback / 2);
+    margin-right: -($column-gutter / 2);
   }
 }
